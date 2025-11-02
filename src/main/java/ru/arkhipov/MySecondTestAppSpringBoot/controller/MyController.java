@@ -38,7 +38,8 @@ public class MyController {
 
     @PostMapping(value = "/feedback")
     public ResponseEntity<Response> feedback(@Valid @RequestBody Request request, BindingResult bindingResult) {
-
+        long currentTime = System.currentTimeMillis();
+        Long receivedTime = request.getReceivedTime();
         log.info("request: {}", request);
 
         Response response = Response.builder()
@@ -50,7 +51,26 @@ public class MyController {
                 .errorMessage(ErrorMessages.EMPTY)
                 .build();
 
-        log.info("response before validation: {}", response);
+        if (receivedTime != null) {
+            long timeDifference = currentTime - receivedTime;
+
+            log.info("========================================");
+            log.info("СЕРВИС 2: Получен модифицированный Request");
+            log.info("========================================");
+            log.info("Request UID: {}", request.getUid());
+            log.info("Operation UID: {}", request.getOperationUid());
+            log.info("Source: {}", request.getSource());
+            log.info("System Name: {}", request.getSystemName());
+            log.info("----------------------------------------");
+            log.info("Время получения Сервисом 1: {} мс", receivedTime);
+            log.info("Текущее время в Сервисе 2: {} мс", currentTime);
+            log.info("========================================");
+            log.info("⏱️  РАЗНИЦА ВРЕМЕНИ: {} миллисекунд", timeDifference);
+            log.info("⏱️  РАЗНИЦА ВРЕМЕНИ: {} секунд", timeDifference / 1000.0);
+            log.info("========================================");
+        } else {
+            log.warn("СЕРВИС 2: receivedTime не установлен в запросе");
+        }
 
         try {
             validationService.isValid(bindingResult);

@@ -34,6 +34,7 @@ public class Request {
     private int templateId;
     private int productCode;
     private int smsCode;
+    private Long receivedTime;
 
     @Override
     public String toString() {
@@ -47,6 +48,7 @@ public class Request {
                 ", templateId=" + templateId +
                 ", productCode=" + productCode +
                 ", smsCode=" + smsCode +
+                ", receivedTime=" + receivedTime +
                 '}';
     }
 }
